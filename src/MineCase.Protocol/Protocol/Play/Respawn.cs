@@ -8,7 +8,7 @@ namespace MineCase.Protocol.Play
 {
     [Packet(0x3B)]
     [GenerateSerializer]
-    public sealed partial class Respawn : IPacket
+    public sealed class Respawn : IPacket
     {
         [SerializeAs(DataType.Int)]
         public int Dimension;
@@ -21,5 +21,21 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.String)]
         public string LevelType;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsInt(Dimension);
+            bw.WriteAsLong(HashedSeed);
+            bw.WriteAsByte(Gamemode);
+            bw.WriteAsString(LevelType);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            Dimension = br.ReadAsInt();
+            HashedSeed = br.ReadAsLong();
+            Gamemode = br.ReadAsByte();
+            LevelType = br.ReadAsString();
+        }
     }
 }

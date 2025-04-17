@@ -8,17 +8,37 @@ namespace MineCase.Protocol.Play
 {
     [Packet(0x0F)]
     [GenerateSerializer]
-    public sealed partial class ServerboundKeepAlive : IPacket
+    public sealed class ServerboundKeepAlive : IPacket
     {
         [SerializeAs(DataType.Long)]
         public long KeepAliveId;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsLong(KeepAliveId);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            KeepAliveId = br.ReadAsLong();
+        }
     }
 
     [Packet(0x21)]
     [GenerateSerializer]
-    public sealed partial class ClientboundKeepAlive : IPacket
+    public sealed class ClientboundKeepAlive : IPacket
     {
         [SerializeAs(DataType.Long)]
         public long KeepAliveId;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsLong(KeepAliveId);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            KeepAliveId = br.ReadAsLong();
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace MineCase.Protocol.Play
 {
     [Packet(0x11)]
     [GenerateSerializer]
-    public sealed partial class PlayerPosition : IPacket
+    public sealed class PlayerPosition : IPacket
     {
         [SerializeAs(DataType.Double)]
         public double X;
@@ -21,5 +21,21 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.Boolean)]
         public bool OnGround;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsDouble(X);
+            bw.WriteAsDouble(FeetY);
+            bw.WriteAsDouble(Z);
+            bw.WriteAsBoolean(OnGround);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            X = br.ReadAsDouble();
+            FeetY = br.ReadAsDouble();
+            Z = br.ReadAsDouble();
+            OnGround = br.ReadAsBoolean();
+        }
     }
 }

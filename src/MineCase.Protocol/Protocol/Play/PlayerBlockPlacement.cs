@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
 using MineCase.Serialization;
 
 namespace MineCase.Protocol.Play
 {
     [Packet(0x2C)]
     [GenerateSerializer]
-    public sealed partial class PlayerBlockPlacement : IPacket
+    public sealed class PlayerBlockPlacement : IPacket
     {
         [SerializeAs(DataType.Position)]
         public Position Location;
@@ -28,5 +27,25 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.Float)]
         public float CursorPositionZ;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsPosition(Location);
+            bw.WriteAsVarInt((byte)Face, out _);
+            bw.WriteAsVarInt((uint)Hand, out _);
+            bw.WriteAsFloat(CursorPositionX);
+            bw.WriteAsFloat(CursorPositionY);
+            bw.WriteAsFloat(CursorPositionZ);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            Location = br.ReadAsPosition();
+            Face = (PlayerDiggingFace)br.ReadAsVarInt(out _);
+            Hand = (Hand)br.ReadAsVarInt(out _);
+            CursorPositionX = br.ReadAsFloat();
+            CursorPositionY = br.ReadAsFloat();
+            CursorPositionZ = br.ReadAsFloat();
+        }
     }
 }

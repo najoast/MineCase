@@ -6,13 +6,10 @@ using MineCase.Buffers;
 using MineCase.Gateway.Network;
 using MineCase.Protocol;
 using MineCase.Server;
-using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Linq;
 using Orleans;
 using Microsoft.Extensions.Hosting;
 
@@ -74,8 +71,7 @@ namespace MineCase.Gateway
         private static Assembly[] SelectAssemblies()
         {
             var assemblies = new List<Assembly>();
-            assemblies
-                .AddInterfaces();
+            assemblies.AddInterfaces();
             return assemblies.ToArray();
         }
     }

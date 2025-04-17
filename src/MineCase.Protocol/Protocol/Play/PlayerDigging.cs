@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-
 using MineCase.Serialization;
 
 namespace MineCase.Protocol.Play
@@ -30,7 +30,7 @@ namespace MineCase.Protocol.Play
 
     [Packet(0x1A)]
     [GenerateSerializer]
-    public sealed partial class PlayerDigging : IPacket
+    public sealed class PlayerDigging : IPacket
     {
         [SerializeAs(DataType.VarInt)]
         public PlayerDiggingStatus Status;
@@ -40,5 +40,19 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.Byte)]
         public PlayerDiggingFace Face;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsVarInt((uint)Status, out _);
+            bw.WriteAsPosition(Location);
+            bw.WriteAsByte((byte)Face);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            Status = (PlayerDiggingStatus)br.ReadAsVarInt(out _);
+            Location = br.ReadAsPosition();
+            Face = (PlayerDiggingFace)br.ReadAsByte();
+        }
     }
 }

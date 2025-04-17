@@ -8,7 +8,7 @@ namespace MineCase.Protocol.Play
 {
     [Packet(0x15)]
     [GenerateSerializer]
-    public sealed partial class WindowProperty : IPacket
+    public sealed class WindowProperty : IPacket
     {
         [SerializeAs(DataType.Byte)]
         public byte WindowId;
@@ -18,5 +18,17 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.Short)]
         public short Value;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            WindowId = br.ReadAsByte();
+            Property = br.ReadAsShort();
+            Value = br.ReadAsShort();
+        }
     }
 }

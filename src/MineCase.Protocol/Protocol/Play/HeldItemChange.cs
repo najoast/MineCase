@@ -8,9 +8,19 @@ namespace MineCase.Protocol.Play
 {
     [Packet(0x23)]
     [GenerateSerializer]
-    public sealed partial class ServerboundHeldItemChange : IPacket
+    public sealed class ServerboundHeldItemChange : IPacket
     {
         [SerializeAs(DataType.Short)]
         public short Slot;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsShort(Slot);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            Slot = br.ReadAsShort();
+        }
     }
 }

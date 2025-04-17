@@ -8,7 +8,7 @@ namespace MineCase.Protocol.Play
 {
     [Packet(0x03)]
     [GenerateSerializer]
-    public sealed partial class SpawnMob : IPacket
+    public sealed class SpawnMob : IPacket
     {
         [SerializeAs(DataType.VarInt)]
         public uint EID;
@@ -48,5 +48,39 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.ByteArray)]
         public byte[] Metadata;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsVarInt(EID, out _);
+            bw.WriteAsUUID(EntityUUID);
+            bw.WriteAsByte(Type);
+            bw.WriteAsDouble(X);
+            bw.WriteAsDouble(Y);
+            bw.WriteAsDouble(Z);
+            bw.WriteAsAngle(Pitch);
+            bw.WriteAsAngle(Yaw);
+            bw.WriteAsAngle(HeadPitch);
+            bw.WriteAsShort(VelocityX);
+            bw.WriteAsShort(VelocityY);
+            bw.WriteAsShort(VelocityZ);
+            bw.WriteAsByteArray(Metadata);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            EID = br.ReadAsVarInt(out _);
+            EntityUUID = br.ReadAsUUID();
+            Type = br.ReadAsByte();
+            X = br.ReadAsDouble();
+            Y = br.ReadAsDouble();
+            Z = br.ReadAsDouble();
+            Pitch = br.ReadAsAngle();
+            Yaw = br.ReadAsAngle();
+            HeadPitch = br.ReadAsAngle();
+            VelocityX = br.ReadAsShort();
+            VelocityY = br.ReadAsShort();
+            VelocityZ = br.ReadAsShort();
+            Metadata = br.ReadAsByteArray();
+        }
     }
 }

@@ -17,10 +17,10 @@ namespace MineCase.Nbt.Tags
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NbtShort"/> class.<para />
-        /// 默认构造函数
+        /// 默认构造函数.
         /// </summary>
-        /// <param name="value">要初始化的值</param>
-        /// <param name="name">该 Tag 的名称</param>
+        /// <param name="value">要初始化的值.</param>
+        /// <param name="name">该 Tag 的名称.</param>
         public NbtShort(short value, string name = null)
             : base(name)
         {

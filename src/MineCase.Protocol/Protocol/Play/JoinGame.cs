@@ -8,7 +8,7 @@ namespace MineCase.Protocol.Play
 {
     [Packet(0x26)]
     [GenerateSerializer]
-    public sealed partial class JoinGame : IPacket
+    public sealed class JoinGame : IPacket
     {
         [SerializeAs(DataType.Int)]
         public int EID;
@@ -36,5 +36,31 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.Boolean)]
         public bool EnableRespawnScreen;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsInt(EID);
+            bw.WriteAsByte(GameMode);
+            bw.WriteAsInt(Dimension);
+            bw.WriteAsLong(HashedSeed);
+            bw.WriteAsByte(MaxPlayers);
+            bw.WriteAsString(LevelType);
+            bw.WriteAsVarInt(ViewDistance, out _);
+            bw.WriteAsBoolean(ReducedDebugInfo);
+            bw.WriteAsBoolean(EnableRespawnScreen);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            EID = br.ReadAsInt();
+            GameMode = br.ReadAsByte();
+            Dimension = br.ReadAsInt();
+            HashedSeed = br.ReadAsLong();
+            MaxPlayers = br.ReadAsByte();
+            LevelType = br.ReadAsString();
+            ViewDistance = br.ReadAsVarInt(out _);
+            ReducedDebugInfo = br.ReadAsBoolean();
+            EnableRespawnScreen = br.ReadAsBoolean();
+        }
     }
 }

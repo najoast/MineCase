@@ -9,7 +9,7 @@ namespace MineCase.Protocol.Play
     // In 1.12, it is PlayerListItem. Now it is PlayerInfo
     [Packet(0x34)]
     [GenerateSerializer]
-    public sealed partial class PlayerInfo<TAction> : IPacket
+    public sealed class PlayerInfo<TAction> : IPacket
         where TAction : PlayerInfoAction, new()
     {
         [SerializeAs(DataType.VarInt)]
@@ -20,9 +20,23 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.Array, ArrayLengthMember = nameof(NumberOfPlayers))]
         public TAction[] Players;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsVarInt(Action, out _);
+            bw.WriteAsVarInt(NumberOfPlayers, out _);
+            bw.WriteAsArray(Players);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            Action = br.ReadAsVarInt(out _);
+            NumberOfPlayers = br.ReadAsVarInt(out _);
+            Players = br.ReadAsArray<TAction>((int)NumberOfPlayers);
+        }
     }
 
-    public abstract partial class PlayerInfoAction : IPacket
+    public abstract class PlayerInfoAction : IPacket
     {
         [SerializeAs(DataType.UUID)]
         public Guid UUID;
@@ -38,7 +52,7 @@ namespace MineCase.Protocol.Play
         }
     }
 
-    public sealed partial class PlayerInfoAddPlayerAction : PlayerInfoAction
+    public sealed class PlayerInfoAddPlayerAction : PlayerInfoAction
     {
         [SerializeAs(DataType.String)]
         public string Name;

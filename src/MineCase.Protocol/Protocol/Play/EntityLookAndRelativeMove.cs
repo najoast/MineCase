@@ -9,7 +9,7 @@ namespace MineCase.Protocol.Play
     // FIXME : 1.15.2 does not have this packet
     [Packet(0x27)]
     [GenerateSerializer]
-    public sealed partial class EntityLookAndRelativeMove : IPacket
+    public sealed class EntityLookAndRelativeMove : IPacket
     {
         [SerializeAs(DataType.VarInt)]
         public uint EID;
@@ -31,5 +31,27 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.Boolean)]
         public bool OnGround;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsVarInt(EID, out _);
+            bw.WriteAsShort(DeltaX);
+            bw.WriteAsShort(DeltaY);
+            bw.WriteAsShort(DeltaZ);
+            bw.WriteAsAngle(Yaw);
+            bw.WriteAsAngle(Pitch);
+            bw.WriteAsBoolean(OnGround);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            EID = br.ReadAsVarInt(out _);
+            DeltaX = br.ReadAsShort();
+            DeltaY = br.ReadAsShort();
+            DeltaZ = br.ReadAsShort();
+            Yaw = br.ReadAsAngle();
+            Pitch = br.ReadAsAngle();
+            OnGround = br.ReadAsBoolean();
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace MineCase.Protocol.Play
 
     [Packet(0x1B)]
     [GenerateSerializer]
-    public sealed partial class EntityAction : IPacket
+    public sealed class EntityAction : IPacket
     {
         [SerializeAs(DataType.VarInt)]
         public uint EntityId;
@@ -31,5 +31,19 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.VarInt)]
         public uint JumpBoost;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsVarInt(EntityId, out _);
+            bw.WriteAsVarInt((uint)ActionId, out _);
+            bw.WriteAsVarInt(JumpBoost, out _);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            EntityId = br.ReadAsVarInt(out _);
+            ActionId = (ActionId)br.ReadAsVarInt(out _);
+            JumpBoost = br.ReadAsVarInt(out _);
+        }
     }
 }

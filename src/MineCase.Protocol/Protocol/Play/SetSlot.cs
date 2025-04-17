@@ -9,7 +9,7 @@ namespace MineCase.Protocol.Play
 {
     [Packet(0x17)]
     [GenerateSerializer]
-    public sealed partial class SetSlot : IPacket
+    public sealed class SetSlot : IPacket
     {
         [SerializeAs(DataType.Byte)]
         public byte WindowId;
@@ -19,5 +19,19 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.Slot)]
         public Slot SlotData;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsByte(WindowId);
+            bw.WriteAsShort(Slot);
+            bw.WriteAsSlot(SlotData);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            WindowId = br.ReadAsByte();
+            Slot = br.ReadAsShort();
+            SlotData = br.ReadAsSlot();
+        }
     }
 }

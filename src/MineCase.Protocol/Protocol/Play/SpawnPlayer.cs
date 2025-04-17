@@ -8,7 +8,7 @@ namespace MineCase.Protocol.Play
 {
     [Packet(0x05)]
     [GenerateSerializer]
-    public sealed partial class SpawnPlayer : IPacket
+    public sealed class SpawnPlayer : IPacket
     {
         [SerializeAs(DataType.VarInt)]
         public uint EntityId;
@@ -30,5 +30,27 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.Angle)]
         public Angle Pitch;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsVarInt(EntityId, out _);
+            bw.WriteAsUUID(PlayerUUID);
+            bw.WriteAsDouble(X);
+            bw.WriteAsDouble(Y);
+            bw.WriteAsDouble(Z);
+            bw.WriteAsAngle(Yaw);
+            bw.WriteAsAngle(Pitch);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            EntityId = br.ReadAsVarInt(out _);
+            PlayerUUID = br.ReadAsUUID();
+            X = br.ReadAsDouble();
+            Y = br.ReadAsDouble();
+            Z = br.ReadAsDouble();
+            Yaw = br.ReadAsAngle();
+            Pitch = br.ReadAsAngle();
+        }
     }
 }

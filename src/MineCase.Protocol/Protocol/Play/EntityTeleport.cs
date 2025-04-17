@@ -8,7 +8,7 @@ namespace MineCase.Protocol.Play
 {
     [Packet(0x57)]
     [GenerateSerializer]
-    public sealed partial class EntityTeleport : IPacket
+    public sealed class EntityTeleport : IPacket
     {
         [SerializeAs(DataType.VarInt)]
         public uint EID;
@@ -30,5 +30,27 @@ namespace MineCase.Protocol.Play
 
         [SerializeAs(DataType.Boolean)]
         public bool OnGround;
+
+        public void Serialize(BinaryWriter bw)
+        {
+            bw.WriteAsVarInt(EID, out _);
+            bw.WriteAsDouble(X);
+            bw.WriteAsDouble(Y);
+            bw.WriteAsDouble(Z);
+            bw.WriteAsAngle(Yaw);
+            bw.WriteAsAngle(Pitch);
+            bw.WriteAsBoolean(OnGround);
+        }
+
+        public void Deserialize(ref SpanReader br)
+        {
+            EID = br.ReadAsVarInt(out _);
+            X = br.ReadAsDouble();
+            Y = br.ReadAsDouble();
+            Z = br.ReadAsDouble();
+            Yaw = br.ReadAsAngle();
+            Pitch = br.ReadAsAngle();
+            OnGround = br.ReadAsBoolean();
+        }
     }
 }
