@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <RootNamespace>MineCase</RootNamespace>
-    <TargetFrameworks>net5.0</TargetFrameworks>
+    <TargetFrameworks>net9.0</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet>../../build/Analyzers.ruleset</CodeAnalysisRuleSet>
@@ -11,22 +10,17 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-  
   <ItemGroup>
     <ProjectReference Include="..\MineCase.Nbt\MineCase.Nbt.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164" PrivateAssets="All" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
-
   <ItemGroup>
     <AdditionalFiles Include="..\..\build\stylecop.json" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Game\Entities\" />
   </ItemGroup>
-
 </Project>

@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFrameworks>net5.0</TargetFrameworks>
+    <TargetFrameworks>net9.0</TargetFrameworks>
     <AssemblyName>MineCase.Server.Interfaces</AssemblyName>
     <RootNamespace>MineCase.Server</RootNamespace>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -10,34 +9,27 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="World\Biomes\**" />
     <EmbeddedResource Remove="World\Biomes\**" />
     <None Remove="World\Biomes\**" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.2.0-rc2">
+    <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.7.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Orleans.Core" Version="3.2.0-rc2" />
+    <PackageReference Include="Microsoft.Orleans.Core" Version="9.1.2" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164" PrivateAssets="All" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\MineCase.Core\MineCase.Core.csproj" />
     <ProjectReference Include="..\MineCase.Engine\MineCase.Server.Engine.csproj" />
     <ProjectReference Include="..\MineCase.Protocol\MineCase.Protocol.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Network\Handshaking\" />
     <Folder Include="Play\" />
-
     <AdditionalFiles Include="..\..\build\stylecop.json" />
   </ItemGroup>
-
 </Project>

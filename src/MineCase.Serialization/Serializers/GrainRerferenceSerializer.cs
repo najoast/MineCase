@@ -13,33 +13,32 @@ namespace MineCase.Serialization.Serializers
     public class GrainRerferenceSerializer<TInterface> : SealedClassSerializerBase<TInterface>
         where TInterface : class, IAddressable
     {
-        private IGrainReferenceConverter _grainReferenceConverter;
-        private IGrainFactory _grainFactory;
+        private readonly IGrainFactory _grainFactory;
 
         public GrainRerferenceSerializer(IServiceProvider serviceProvider)
         {
-            _grainReferenceConverter = serviceProvider.GetRequiredService<IGrainReferenceConverter>();
             _grainFactory = serviceProvider.GetRequiredService<IGrainFactory>();
         }
 
         protected override void SerializeValue(BsonSerializationContext context, BsonSerializationArgs args, TInterface value)
         {
-            var refer = (GrainReference)(object)value;
-            var key = refer.ToKeyString();
-            context.Writer.WriteString(key);
+            if (value is GrainReference grainRef)
+            {
+                var grainId = grainRef.GrainId;
+                context.Writer.WriteString(grainId.ToString());
+            }
+            else
+            {
+                throw new InvalidOperationException($"Expected GrainReference but got {value?.GetType().Name}");
+            }
         }
 
         protected override TInterface DeserializeValue(BsonDeserializationContext context, BsonDeserializationArgs args)
         {
             var key = context.Reader.ReadString();
-            var refer = _grainReferenceConverter.GetGrainFromKeyString(key);
-            if (refer != null)
-            {
-                refer.BindGrainReference(_grainFactory);
-                return refer.AsReference<TInterface>();
-            }
-
-            return null;
+            
+            var grainId = GrainId.Parse(key);
+            return _grainFactory.GetGrain<TInterface>(grainId);
         }
     }
 
