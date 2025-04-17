@@ -58,6 +58,8 @@
     <Rule Id="SA1623" Action="None" />
     <!-- Don't copy/paste documentation -->
     <Rule Id="SA1625" Action="None" />
+    <!-- Documentation must end with a period -->
+    <Rule Id="SA1629" Action="None" />
     <!-- Exception documentation must not be empty -->
     <Rule Id="SA1627" Action="None" />
     <!-- File must have header -->
