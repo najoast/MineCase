@@ -11,7 +11,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Orleans;
+using Orleans.Hosting;
 using Microsoft.Extensions.Hosting;
+using Orleans.Configuration;
 
 namespace MineCase.Gateway
 {
@@ -24,22 +26,19 @@ namespace MineCase.Gateway
             services.AddSingleton<IPacketCompress, PacketCompress>();
             services.AddTransient<ClientSession>();
             services.AddHostedService<ConnectionRouter>();
-            services.AddOrleansMultiClient(builder =>
+
+            services.AddOrleansClient(builder =>
             {
-                builder.AddClient(options =>
+                builder.UseLocalhostClustering();
+                builder.UseMongoDBClient(context.Configuration.GetSection("persistenceOptions")["connectionString"]);
+                builder.UseMongoDBClustering(builder =>
+                {
+                    builder.DatabaseName = context.Configuration.GetSection("persistenceOptions")["databaseName"];
+                });
+                builder.Configure<ClusterOptions>(options =>
                 {
                     options.ClusterId = "dev";
                     options.ServiceId = "MineCaseService";
-                    options.Configure = c =>
-                    {
-                        // c.UseLocalhostClustering(gatewayPort: 30000);
-                        c.UseMongoDBClient(context.Configuration.GetSection("persistenceOptions")["connectionString"]);
-                        c.UseMongoDBClustering(options =>
-                        {
-                            options.DatabaseName = context.Configuration.GetSection("persistenceOptions")["databaseName"];
-                        });
-                    };
-                    options.SetServiceAssembly(SelectAssemblies());
                 });
             });
 
