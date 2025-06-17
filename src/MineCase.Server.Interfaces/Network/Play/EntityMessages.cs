@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MineCase.Engine;
 using MineCase.Protocol;
+using Orleans;
 using Orleans.Concurrency;
 
 namespace MineCase.Server.Network.Play

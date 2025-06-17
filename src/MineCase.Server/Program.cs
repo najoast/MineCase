@@ -3,7 +3,6 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MineCase.Serialization.Serializers;
 using Orleans;
-using Orleans.ApplicationParts;
 using Orleans.Configuration;
 using Orleans.Hosting;
 
@@ -16,24 +15,20 @@ namespace MineCase.Server
             var createShardKey = false;
             Serializers.RegisterAll();
 
-            var hostBuilder = new HostBuilder()
+            var hostBuilder = Host.CreateDefaultBuilder(args)
                 .UseServiceProviderFactory(x => new AutofacServiceProviderFactory(ConfigureAutofac))
                 .ConfigureAppConfiguration(ConfigureAppConfiguration)
                 .ConfigureServices(ConfigureServices)
                 .ConfigureLogging(ConfigureLogging)
                 .UseConsoleLifetime()
-                .UseOrleans((Microsoft.Extensions.Hosting.HostBuilderContext context, ISiloBuilder builder) =>
+                .UseOrleans((context, siloBuilder) =>
                 {
-                    builder.Configure<ClusterOptions>(options =>
+                    siloBuilder.Configure<ClusterOptions>(options =>
                     {
                         options.ClusterId = "dev";
                         options.ServiceId = "MineCaseService";
                     })
-                    .Configure<SchedulingOptions>(options =>
-                    {
-                        options.AllowCallChainReentrancy = true;
-                        options.PerformDeadlockDetection = true;
-                    })
+                    // SchedulingOptions: AllowCallChainReentrancy and PerformDeadlockDetection removed in Orleans 7+
                     .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
                     .UseMongoDBClient(context.Configuration.GetSection("persistenceOptions")["connectionString"])
                     .AddSimpleMessageStreamProvider("JobsProvider")
@@ -47,10 +42,8 @@ namespace MineCase.Server
                     {
                         c.DatabaseName = context.Configuration.GetSection("persistenceOptions")["databaseName"];
                         c.CreateShardKeyForCosmos = createShardKey;
-                        // c.UseJsonFormat = true;
                     })
-                    .ConfigureApplicationParts(ConfigureApplicationParts)
-                    .UseDashboard(options => { })
+                    .UseDashboard()
                     .AddMongoDBGrainStorageAsDefault(c => c.Configure(options =>
                     {
                         options.DatabaseName = context.Configuration.GetSection("persistenceOptions")["databaseName"];
@@ -66,11 +59,6 @@ namespace MineCase.Server
             var host = hostBuilder.Build();
             Serializers.RegisterAll(host.Services);
             await host.RunAsync();
-        }
-
-        private static void ConfigureApplicationParts(IApplicationPartManager parts)
-        {
-            parts.AddFromApplicationBaseDirectory().WithReferences();
         }
     }
 }

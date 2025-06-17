@@ -1,39 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MineCase.Engine.Serialization;
+using Orleans;
+using Orleans.Runtime;
 using Orleans.Streams;
+using Orleans.Timers;
 
 namespace MineCase.Engine
 {
-    public partial class DependencyObject
+    public partial class DependencyObject : Grain
     {
         private bool _isDestroyed = false;
         private readonly Queue<Func<Task>> _operationQueue = new Queue<Func<Task>>();
 
         protected ILogger Logger { get; private set; }
 
-        public override async Task OnActivateAsync()
+        public override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            Logger = ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger(GetType());
+            Logger = this.ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger(GetType());
             InitializePreLoadComponent();
             await ReadStateAsync();
             InitializeComponents();
         }
 
-        public override async Task OnDeactivateAsync()
+        public override async Task OnDeactivateAsync(DeactivationReason reason, CancellationToken cancellationToken)
         {
             await WriteStateAsync();
-            await base.OnDeactivateAsync();
+            await base.OnDeactivateAsync(reason, cancellationToken);
         }
 
         public void Destroy()
         {
             _isDestroyed = true;
-            DeactivateOnIdle();
+            this.DeactivateOnIdle();
         }
 
         protected virtual void InitializeComponents()
@@ -73,7 +77,7 @@ namespace MineCase.Engine
                     await Tell(BeforeWriteState.Default);
                     var state = new DependencyObjectState
                     {
-                        GrainKeyString = GrainReference.ToKeyString(),
+                        GrainKeyString = this.GetPrimaryKeyString(),
                         ValueStorage = _valueStorage
                     };
 
@@ -117,12 +121,14 @@ namespace MineCase.Engine
 
         public IAsyncStream<T> GetStream<T>(string providerName, Guid streamId, string streamNamespace)
         {
-            return GetStreamProvider(providerName).GetStream<T>(streamId, streamNamespace);
+            var streamProvider = this.GetStreamProvider(providerName);
+            var streamIdObject = StreamId.Create(streamNamespace, streamId);
+            return streamProvider.GetStream<T>(streamIdObject);
         }
 
-        public new IDisposable RegisterTimer(Func<object, Task> callback, object state, TimeSpan dueTime, TimeSpan period)
+        public IDisposable RegisterGrainTimer(Func<object, Task> callback, object state, TimeSpan dueTime, TimeSpan period)
         {
-            return base.RegisterTimer(callback, state, dueTime, period);
+            return this.RegisterGrainTimer(callback, state, new GrainTimerCreationOptions { DueTime = dueTime, Period = period, Interleave = true });
         }
     }
 }

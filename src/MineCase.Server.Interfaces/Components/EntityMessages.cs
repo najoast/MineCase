@@ -4,6 +4,7 @@ using System.Text;
 using MineCase.Engine;
 using MineCase.Server.Game.Entities;
 using MineCase.World;
+using Orleans;
 using Orleans.Concurrency;
 
 namespace MineCase.Server.Components

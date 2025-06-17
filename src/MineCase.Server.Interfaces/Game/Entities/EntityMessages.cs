@@ -6,6 +6,7 @@ using MineCase.Server.Game.Windows;
 using MineCase.Server.User;
 using MineCase.Server.World;
 using MineCase.World;
+using Orleans;
 using Orleans.Concurrency;
 
 namespace MineCase.Server.Game.Entities.Components
