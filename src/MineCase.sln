@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29709.97
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36109.1 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MineCase.Server", "MineCase.Server\MineCase.Server.csproj", "{8E71CBEC-5804-4125-B651-C78426E57C8C}"
 EndProject
@@ -53,6 +53,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MineCase.Serialization", "MineCase.Serialization\MineCase.Serialization.csproj", "{AA85C7DA-31CB-499B-A74F-CF4FDC8EF669}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{3E9DA133-F1BC-4EB1-A574-361AFEF0ABB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MineCase.Abstractions", "MineCase.Abstractions\MineCase.Abstractions.csproj", "{3FA715D3-2DE4-44D3-AA8A-C0BEA939A7FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,6 +152,14 @@ Global
 		{AA85C7DA-31CB-499B-A74F-CF4FDC8EF669}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AA85C7DA-31CB-499B-A74F-CF4FDC8EF669}.TravisCI|Any CPU.ActiveCfg = TravisCI|Any CPU
 		{AA85C7DA-31CB-499B-A74F-CF4FDC8EF669}.TravisCI|Any CPU.Build.0 = TravisCI|Any CPU
+		{3FA715D3-2DE4-44D3-AA8A-C0BEA939A7FD}.Appveyor|Any CPU.ActiveCfg = Release|Any CPU
+		{3FA715D3-2DE4-44D3-AA8A-C0BEA939A7FD}.Appveyor|Any CPU.Build.0 = Release|Any CPU
+		{3FA715D3-2DE4-44D3-AA8A-C0BEA939A7FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FA715D3-2DE4-44D3-AA8A-C0BEA939A7FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FA715D3-2DE4-44D3-AA8A-C0BEA939A7FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FA715D3-2DE4-44D3-AA8A-C0BEA939A7FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FA715D3-2DE4-44D3-AA8A-C0BEA939A7FD}.TravisCI|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FA715D3-2DE4-44D3-AA8A-C0BEA939A7FD}.TravisCI|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,6 +176,7 @@ Global
 		{B7B1A959-72F3-42C6-B138-93C8D654F139} = {CB620063-55E2-4694-B1E0-E99BB032BF03}
 		{76AFDAE6-75F7-4E68-86CD-DE19CA47246B} = {1077810B-83FF-405E-94BD-95AFC284A416}
 		{AA85C7DA-31CB-499B-A74F-CF4FDC8EF669} = {CB620063-55E2-4694-B1E0-E99BB032BF03}
+		{3FA715D3-2DE4-44D3-AA8A-C0BEA939A7FD} = {CB620063-55E2-4694-B1E0-E99BB032BF03}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AB995C3-E961-463C-8A55-3149C51761B5}

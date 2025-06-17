@@ -16,7 +16,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace MineCase.Server
 {
-    partial class Program
+    static partial class Program
     {
         private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
@@ -40,11 +40,6 @@ namespace MineCase.Server
                 .AddInterfaces()
                 .AddGrains();
             builder.RegisterAssemblyModules(assemblies.ToArray());
-        }
-
-        private static void ConfigureLogging(ILoggingBuilder loggingBuilder)
-        {
-            loggingBuilder.AddConsole();
         }
     }
 }

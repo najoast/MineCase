@@ -32,6 +32,7 @@
 	<PackageReference Include="Microsoft.Orleans.Sdk" Version="9.1.2" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MineCase.Abstractions\MineCase.Abstractions.csproj" />
     <ProjectReference Include="..\MineCase.Algorithm\MineCase.Algorithm.csproj" />
     <ProjectReference Include="..\MineCase.Core\MineCase.Core.csproj" />
     <ProjectReference Include="..\MineCase.Protocol\MineCase.Protocol.csproj" />

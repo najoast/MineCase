@@ -66,6 +66,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MineCase.Abstractions\MineCase.Abstractions.csproj" />
     <ProjectReference Include="..\MineCase.Serialization\MineCase.Serialization.csproj" />
     <ProjectReference Include="..\MineCase.Server.Grains\MineCase.Server.Grains.csproj" />
   </ItemGroup>

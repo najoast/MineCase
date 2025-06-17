@@ -1,32 +1,34 @@
-﻿using System.Threading.Tasks;
-using Autofac.Extensions.DependencyInjection;
+﻿using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MineCase.Serialization.Serializers;
-
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
-
+using MineCase.Serialization.Serializers;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
+using Orleans.Streaming;
+//using Orleans.Providers;
 using Orleans.Runtime;
+using System.Threading.Tasks;
+using MineCase.Abstractions.Constants;
+using Orleans.Providers;
 
 
 namespace MineCase.Server;
 
-partial class Program
+internal static partial class Program
 {
-    static async Task Main(string[] args)
+    private static async Task Main(string[] args)
     {
-        var createShardKey = false;
+        const bool createShardKey = false;
         Serializers.RegisterAll();
 
         var hostBuilder = Host.CreateDefaultBuilder(args);
         hostBuilder.UseServiceProviderFactory(x => new AutofacServiceProviderFactory(ConfigureAutofac));
         hostBuilder.ConfigureAppConfiguration(ConfigureAppConfiguration);
         hostBuilder.ConfigureServices(ConfigureServices);
-        //hostBuilder.ConfigureLogging(ConfigureLogging);
+        //hostBuilder.ConfigureLogging(loggingBuilder => loggingBuilder.AddConsole());
         hostBuilder.UseConsoleLifetime();
         hostBuilder.UseOrleans((context, siloBuilder) =>
         {
@@ -40,8 +42,18 @@ partial class Program
             // SchedulingOptions: AllowCallChainReentrancy and PerformDeadlockDetection removed in Orleans 7+
             siloBuilder.ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000);
             siloBuilder.UseMongoDBClient(context.Configuration.GetSection("persistenceOptions")["connectionString"]);
+
+            // 3.x 写法
             //siloBuilder.AddSimpleMessageStreamProvider("JobsProvider");
             //siloBuilder.AddSimpleMessageStreamProvider("TransientProvider");
+            // 7.x 写法：
+            // https://learn.microsoft.com/en-us/dotnet/orleans/migration-guide
+            // BroadcastChannel 改动过大，先用 MemoryStreams 了
+            // siloBuilder.AddBroadcastChannel(StreamProviders.JobsProvider, options => options.FireAndForgetDelivery = false);
+            // siloBuilder.AddBroadcastChannel(StreamProviders.TransientProvider, options => options.FireAndForgetDelivery = false);
+            siloBuilder.AddMemoryStreams<DefaultMemoryMessageBodySerializer>(StreamProviders.JobsProvider, c => c.ConfigurePartitioning());
+            siloBuilder.AddMemoryStreams<DefaultMemoryMessageBodySerializer>(StreamProviders.TransientProvider, c => c.ConfigurePartitioning());
+
             siloBuilder.UseMongoDBReminders(options =>
             {
                 options.DatabaseName = context.Configuration.GetSection("persistenceOptions")["databaseName"];
