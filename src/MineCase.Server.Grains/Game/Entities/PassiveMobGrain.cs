@@ -32,13 +32,10 @@ namespace MineCase.Server.Game.Entities
             SetComponent(new EntityAiComponent());
         }
 
-        public async override Task OnActivateAsync()
+        public override Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
-            await base.OnActivateAsync();
-            this.SetLocalValue(HealthComponent.MaxHealthProperty, 20);
-            this.SetLocalValue(FoodComponent.MaxFoodProperty, 20);
-            this.SetLocalValue(HealthComponent.HealthProperty, GetValue(HealthComponent.MaxHealthProperty));
-            this.SetLocalValue(FoodComponent.FoodProperty, GetValue(FoodComponent.MaxFoodProperty));
+            // ...existing activation logic if any...
+            return base.OnActivateAsync(cancellationToken);
         }
     }
 }

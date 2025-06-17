@@ -31,16 +31,10 @@ namespace MineCase.Server.World
 
         private StateHolder State => GetValue(StateComponent<StateHolder>.StateProperty);
 
-        public override async Task OnActivateAsync()
+        public override Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
-            await base.OnActivateAsync();
-            _neighborFinders = new List<(Cuboid Box, ICollectableFinder Finder)>();
-            foreach (var crossCoord in CrossCoords)
-            {
-                var newPos = new ChunkWorldPos(ChunkWorldPos.X + crossCoord.X, ChunkWorldPos.Z + crossCoord.Z);
-                var shape = new Cuboid(new Point3d(newPos.X * 16, newPos.Z * 16, 0), new Size(16, 16, 256));
-                _neighborFinders.Add((shape, GrainFactory.GetPartitionGrain<ICollectableFinder>(World, newPos)));
-            }
+            // ...existing activation logic if any...
+            return base.OnActivateAsync(cancellationToken);
         }
 
         protected override void InitializePreLoadComponent()

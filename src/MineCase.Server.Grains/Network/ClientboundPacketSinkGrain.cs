@@ -21,11 +21,11 @@ namespace MineCase.Server.Network
             _packetPackager = packetPackager;
         }
 
-        public override Task OnActivateAsync()
+        public override Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
             _subsManager = new Grains.GrainObserverManager<IClientboundPacketObserver>();
             _subsManager.ExpirationDuration = new TimeSpan(0, 0, 20);
-            return base.OnActivateAsync();
+            return base.OnActivateAsync(cancellationToken);
         }
 
         // Clients call this to subscribe.

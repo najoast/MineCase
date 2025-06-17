@@ -40,7 +40,7 @@ namespace MineCase.Server.World.Decoration.Plants
             _logger = loggerFactory.CreateLogger<AbstractTreeGeneratorGrain>();
         }
 
-        public override Task OnActivateAsync()
+        public override Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace MineCase.Server.World.Decoration.Plants
                 this._logger.LogError(default(EventId), e, e.Message);
             }
 
-            return Task.CompletedTask;
+            return base.OnActivateAsync(cancellationToken);
         }
 
         protected virtual Task SetBlock(IWorld world, ChunkWorldPos chunkWorldPos, BlockWorldPos pos, BlockState state)

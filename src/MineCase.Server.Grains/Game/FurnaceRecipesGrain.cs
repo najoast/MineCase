@@ -23,7 +23,7 @@ namespace MineCase.Server.Game
             _fileProvider = new PhysicalFileProvider(AppContext.BaseDirectory);
         }
 
-        public override async Task OnActivateAsync()
+        public override async Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
             var file = _fileProvider.GetFileInfo(_recipesFileName);
 
@@ -31,6 +31,8 @@ namespace MineCase.Server.Game
             using (var sr = new StreamReader(file.CreateReadStream()))
                 await recipeLoader.LoadRecipes(sr);
             _recipeMatcher = new FurnaceRecipeMatcher(recipeLoader.Recipes, recipeLoader.Fuels);
+
+            await base.OnActivateAsync(cancellationToken);
         }
 
         public Task<FurnaceRecipe> FindRecipe(Slot input)

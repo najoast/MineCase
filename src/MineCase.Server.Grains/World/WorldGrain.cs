@@ -33,9 +33,9 @@ namespace MineCase.Server.World
             SetComponent(new PeriodicSaveStateComponent(TimeSpan.FromMinutes(1)));
         }
 
-        public override async Task OnActivateAsync()
+        public override async Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
-            await base.OnActivateAsync();
+            await base.OnActivateAsync(cancellationToken);
 
             var serverSettings = GrainFactory.GetGrain<IServerSettings>(0);
             _genSettings = new GeneratorSettings();

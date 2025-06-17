@@ -48,7 +48,7 @@ namespace MineCase.Server.World.Generation
 
         private GenLayer _genlayer;
 
-        public override Task OnActivateAsync()
+        public override Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
             _densityMap = new float[5, 33, 5];
             _depthMap = new float[5, 1, 5];
@@ -79,7 +79,7 @@ namespace MineCase.Server.World.Generation
 
             _genlayer = GenLayer.InitAllLayer(_seed);
 
-            return Task.CompletedTask;
+            return base.OnActivateAsync(cancellationToken);
         }
 
         public async Task<ChunkColumnCompactStorage> Generate(IWorld world, int x, int z, GeneratorSettings settings)

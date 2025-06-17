@@ -27,28 +27,10 @@ namespace MineCase.Server.World.Decoration.Plants
             _logger = loggerFactory.CreateLogger<TreeGeneratorGrain>();
         }
 
-        public async override Task OnActivateAsync()
+        public override Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
-            await base.OnActivateAsync();
-
-            _minTreeHeight = _generatorSettings.TreeHeight;
-            _vines = _generatorSettings.TreeVine;
-            _treeType = _generatorSettings.PlantType;
-            if (_generatorSettings.PlantType == PlantsType.Oak)
-            {
-                _wood = BlockStates.OakLog();
-                _leaves = BlockStates.OakLeaves(OakLeavesDistanceType.Distance1, OakLeavesPersistentType.False);
-            }
-            else if (_generatorSettings.PlantType == PlantsType.Spruce)
-            {
-                _wood = BlockStates.SpruceLog();
-                _leaves = BlockStates.SpruceLeaves(SpruceLeavesDistanceType.Distance1, SpruceLeavesPersistentType.False);
-            }
-            else if (_generatorSettings.PlantType == PlantsType.Birch)
-            {
-                _wood = BlockStates.BirchLog();
-                _leaves = BlockStates.BirchLeaves(BirchLeavesDistanceType.Distance1, BirchLeavesPersistentType.False);
-            }
+            // You may add activation logic here if needed
+            return base.OnActivateAsync(cancellationToken);
         }
 
         public override async Task GenerateSingle(IWorld world, ChunkWorldPos chunkWorldPos, BlockWorldPos pos)

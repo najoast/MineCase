@@ -41,7 +41,7 @@ namespace MineCase.Server.Game
             _packetPackager = packetPackager;
         }
 
-        public override async Task OnActivateAsync()
+        public override async Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
             var stream = GetStreamProvider(StreamProviders.JobsProvider).GetStream<SendChunkJob>(this.GetPrimaryKey(), StreamProviders.Namespaces.ChunkSender);
             await stream.SubscribeAsync(OnNextAsync);

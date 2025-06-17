@@ -31,9 +31,9 @@ namespace MineCase.Server.Game
 
         private ILogger _logger;
 
-        public override async Task OnActivateAsync()
+        public override async Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
-            await base.OnActivateAsync();
+            await base.OnActivateAsync(cancellationToken);
             _logger = ServiceProvider.GetRequiredService<ILoggerFactory>().CreateLogger<GameSession>();
             _world = await GrainFactory.GetGrain<IWorldAccessor>(0).GetWorld(this.GetPrimaryKeyString());
             await _fixedUpdate.Start(_world);

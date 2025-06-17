@@ -28,9 +28,9 @@ namespace MineCase.Server.Game.Entities
             SetComponent(new DiscoveryRegisterComponent());
         }
 
-        public async override Task OnActivateAsync()
+        public override async Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
-            await base.OnActivateAsync();
+            await base.OnActivateAsync(cancellationToken);
             this.SetLocalValue(HealthComponent.MaxHealthProperty, 20);
             this.SetLocalValue(FoodComponent.MaxFoodProperty, 20);
             this.SetLocalValue(HealthComponent.HealthProperty, GetValue(HealthComponent.MaxHealthProperty));

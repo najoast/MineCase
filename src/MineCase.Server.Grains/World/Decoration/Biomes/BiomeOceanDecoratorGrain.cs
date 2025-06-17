@@ -17,7 +17,7 @@ namespace MineCase.Server.World.Decoration.Biomes
     [StatelessWorker]
     public class BiomeOceanDecoratorGrain : BiomeDecoratorGrain, IBiomeOceanDecorator
     {
-        public override Task OnActivateAsync()
+        public override Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
             if (this.GetPrimaryKeyLong() == (long)BiomeId.Ocean)
             {
@@ -52,7 +52,7 @@ namespace MineCase.Server.World.Decoration.Biomes
             MonsterList.Add(MobType.Zombie);
             MonsterList.Add(MobType.Spider);
 
-            return Task.CompletedTask;
+            return base.OnActivateAsync(cancellationToken);
         }
 
         public async override Task Decorate(IWorld world, ChunkWorldPos chunkWorldPos, GeneratorSettings settings)

@@ -18,11 +18,11 @@ namespace MineCase.Server.World.Decoration.Plants
             _logger = loggerFactory.CreateLogger<JungleGeneratorGrain>();
         }
 
-        public async override Task OnActivateAsync()
+        public override Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
-            await base.OnActivateAsync();
             _wood = BlockStates.AcaciaLog();
             _leaves = BlockStates.AcaciaLeaves(AcaciaLeavesDistanceType.Distance1, AcaciaLeavesPersistentType.False);
+            return base.OnActivateAsync(cancellationToken);
         }
 
         public async override Task GenerateSingle(IWorld world, ChunkWorldPos chunkWorldPos, BlockWorldPos pos)
