@@ -54,7 +54,7 @@ namespace MineCase.Server.World
                 foreach (var entity in State.DiscoveryEntities)
                 {
                     if (entity.Equals(player)) continue;
-                    entity.InvokeOneWay(g => g.Tell(message));
+                    entity.Tell(message);
                 }
 
                 if (active && State.IsTickEmitterActive)
@@ -83,7 +83,7 @@ namespace MineCase.Server.World
             if (State.DiscoveryEntities.Add(entity))
             {
                 MarkDirty();
-                entity.InvokeOneWay(e => e.Tell(BroadcastDiscovered.Default));
+                entity.Tell(BroadcastDiscovered.Default);
             }
 
             return Task.CompletedTask;

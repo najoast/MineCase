@@ -37,6 +37,7 @@ namespace MineCase.Server.World.Decoration.Plants
                 _wood = BlockStates.SpruceLog();
                 _leaves = BlockStates.SpruceLeaves(SpruceLeavesDistanceType.Distance1, SpruceLeavesPersistentType.False);
             }
+
             return base.OnActivateAsync(cancellationToken);
         }
 

@@ -20,7 +20,7 @@ namespace MineCase.Server.Persistence.Components
 
         protected override void OnAttached()
         {
-            AttachedObject.RegisterTimer(SaveIfDirty, null, _periodTime, _periodTime);
+            AttachedObject.RegisterGrainTimer(SaveIfDirty, null, _periodTime, _periodTime);
         }
 
         private Task SaveIfDirty(object state)

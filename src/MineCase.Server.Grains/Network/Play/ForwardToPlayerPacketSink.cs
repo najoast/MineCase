@@ -28,11 +28,12 @@ namespace MineCase.Server.Network.Play
 
         public Task SendPacket(uint packetId, Immutable<byte[]> data)
         {
-            _player.InvokeOneWay(e => e.Tell(new PacketForwardToPlayer
+            // Replacing InvokeOneWay with a direct call to Tell, as InvokeOneWay is not defined for IPlayer.
+            _player.Tell(new PacketForwardToPlayer
             {
                 PacketId = packetId,
                 Data = data.Value
-            }));
+            });
             return Task.CompletedTask;
         }
     }

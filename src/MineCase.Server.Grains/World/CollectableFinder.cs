@@ -27,7 +27,7 @@ namespace MineCase.Server.World
             (0, 0), (-1, 0), (-1, 1), (0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1)
         };
 
-        private List<(Cuboid Box, ICollectableFinder Finder)> _neighborFinders;
+        private List<(Cuboid Box, ICollectableFinder Finder)> _neighborFinders = new ();
 
         private StateHolder State => GetValue(StateComponent<StateHolder>.StateProperty);
 
@@ -70,7 +70,7 @@ namespace MineCase.Server.World
                                                                             .SelectMany(o => o));
             result.Remove(entity);
             if (result.Count != 0)
-                entity.InvokeOneWay(e => e.Tell(new CollisionWith { Entities = result }));
+                await entity.Tell(new CollisionWith { Entities = result });
         }
 
         public async Task SpawnPickup(Vector3 position, Immutable<Slot[]> slots)

@@ -33,7 +33,7 @@ namespace MineCase.Server.Components
             _actualAge = 0;
             _stopwatch = new Stopwatch();
             _stopwatch.Start();
-            _tickTimer = AttachedObject.RegisterTimer(OnTick, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1));
+            _tickTimer = AttachedObject.RegisterGrainTimer(OnTick, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1));
         }
 
         private async Task OnTick(object arg)

@@ -11,6 +11,7 @@ using MineCase.Server.World;
 using MineCase.World;
 using Orleans;
 using Orleans.Concurrency;
+using Orleans.Runtime;
 using Orleans.Streams;
 
 namespace MineCase.Server.Game
@@ -43,7 +44,9 @@ namespace MineCase.Server.Game
 
         public override async Task OnActivateAsync(System.Threading.CancellationToken cancellationToken)
         {
-            var stream = GetStreamProvider(StreamProviders.JobsProvider).GetStream<SendChunkJob>(this.GetPrimaryKey(), StreamProviders.Namespaces.ChunkSender);
+            var streamProvider = this.GetStreamProvider(StreamProviders.JobsProvider);
+            var streamIdObject = StreamId.Create(StreamProviders.Namespaces.ChunkSender, this.GetPrimaryKey());
+            var stream = streamProvider.GetStream<SendChunkJob>(streamIdObject);
             await stream.SubscribeAsync(OnNextAsync);
         }
 

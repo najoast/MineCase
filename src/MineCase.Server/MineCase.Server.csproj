@@ -9,18 +9,16 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="8.2.1" />
+    <PackageReference Include="Autofac" Version="8.3.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.6" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="OrleansDashboard" Version="8.2.0" />
 	<PackageReference Include="Microsoft.Orleans.Server" Version="9.1.2" />
 	<PackageReference Include="Orleans.Providers.MongoDB" Version="9.1.0" />
-	<PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="9.1.2" />
-	<PackageReference Include="Microsoft.Orleans.Sdk" Version="9.1.2" />
   </ItemGroup>
   <ItemGroup>
     <None Update=".dockerignore">

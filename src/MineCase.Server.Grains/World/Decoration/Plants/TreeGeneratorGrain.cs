@@ -197,5 +197,20 @@ namespace MineCase.Server.World.Decoration.Plants
                 }
             }
         }
+
+        public void SetMinTreeHeight(int minTreeHeight)
+        {
+            _minTreeHeight = minTreeHeight;
+        }
+
+        public void SetVines(bool vines)
+        {
+            _vines = vines;
+        }
+
+        public void SetTreeType(PlantsType treeType)
+        {
+            _treeType = treeType;
+        }
     }
 }
