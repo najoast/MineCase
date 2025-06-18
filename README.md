@@ -1,6 +1,6 @@
 MineCase 
 ======================================
-#### [![Financial Contributors on Open Collective](https://opencollective.com/MineCase/all/badge.svg?label=financial+contributors)](https://opencollective.com/MineCase) [![Build Status](https://travis-ci.org/najoast/MineCase.svg?branch=master)](https://travis-ci.org/najoast/MineCase)
+#### [![.NET Build Status](https://github.com/najoast/MineCase/actions/workflows/dotnet.yml/badge.svg)](https://github.com/najoast/MineCase/actions/workflows/dotnet.yml)
 
 ![Logo](doc/logo/MineCaseLogo.png)
 
