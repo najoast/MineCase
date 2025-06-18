@@ -28,10 +28,10 @@ jobs:
         key: ${{ runner.os }}-dotnet-${{ hashFiles('**/*.csproj') }}
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore src/MineCase.sln
 
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build src/MineCase.sln --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test --configuration Release --no-build --verbosity normal
+      run: dotnet test src/MineCase.sln --configuration Release --no-build --verbosity normal
