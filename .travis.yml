@@ -1,5 +1,5 @@
 language: csharp
-dotnet: 3.1.1
+dotnet: 9.0
 mono: none
 script:
 # build
