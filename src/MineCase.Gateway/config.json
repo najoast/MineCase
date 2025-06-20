@@ -1,6 +1,6 @@
 ﻿{
   "persistenceOptions": {
-    "connectionString": "mongodb://localhost:27017/minecase",
+    "connectionString": "mongodb://alkaid3:E5w3qKDZBAmrG2RHNyYVhpf9PsznjCQ6@10.23.234.251:27017/admin",
     "databaseName": "minecase"
   }
 }

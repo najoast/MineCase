@@ -17,7 +17,7 @@ using Orleans.Configuration;
 
 namespace MineCase.Gateway
 {
-    partial class Program
+    internal static partial class Program
     {
         private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
@@ -29,11 +29,10 @@ namespace MineCase.Gateway
 
             services.AddOrleansClient(builder =>
             {
-                builder.UseLocalhostClustering();
                 builder.UseMongoDBClient(context.Configuration.GetSection("persistenceOptions")["connectionString"]);
-                builder.UseMongoDBClustering(builder =>
+                builder.UseMongoDBClustering(options =>
                 {
-                    builder.DatabaseName = context.Configuration.GetSection("persistenceOptions")["databaseName"];
+                    options.DatabaseName = context.Configuration.GetSection("persistenceOptions")["databaseName"];
                 });
                 builder.Configure<ClusterOptions>(options =>
                 {

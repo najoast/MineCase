@@ -3,9 +3,9 @@ using Microsoft.Extensions.Hosting;
 
 namespace MineCase.Gateway
 {
-    partial class Program
+    internal static partial class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var hostBuilder = Host.CreateDefaultBuilder(args);
             hostBuilder.ConfigureAppConfiguration(ConfigureAppConfiguration);

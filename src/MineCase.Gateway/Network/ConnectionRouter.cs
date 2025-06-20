@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -14,36 +15,31 @@ using Orleans;
 
 namespace MineCase.Gateway.Network
 {
-    class ConnectionRouter : IHostedService
+    internal class ConnectionRouter(
+        IClusterClient grainFactory,
+        ILogger<ConnectionRouter> logger,
+        IServiceProvider serviceProvider)
+        : IHostedService
     {
-        private readonly IOrleansClient _grainFactory;
-        private readonly ILogger _logger;
-        private readonly IServiceProvider _serviceProvider;
-
-        public ConnectionRouter(IOrleansClient grainFactory, ILogger<ConnectionRouter> logger, IServiceProvider serviceProvider)
-        {
-            _grainFactory = grainFactory;
-            _logger = logger;
-            _serviceProvider = serviceProvider;
-        }
+        private readonly ILogger _logger = logger;
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             try
             {
-                var settings = await _grainFactory.GetGrain<IServerSettings>(0).GetSettings();
+                var grain = grainFactory.GetGrain<IServerSettings>(0);
+                var settings = await grain.GetSettings();
                 IPAddress ip = IPAddress.Parse(settings.ServerIp);
                 int port = (int)settings.ServerPort;
 
-                TcpListener _listener;
-                _listener = new TcpListener(new IPEndPoint(ip, port));
-                _listener.Start();
+                var listener = new TcpListener(new IPEndPoint(ip, port));
+                listener.Start();
                 _logger.LogInformation("ConnectionRouter started.");
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    DispatchIncomingClient(await _listener.AcceptTcpClientAsync(), cancellationToken);
+                    DispatchIncomingClient(await listener.AcceptTcpClientAsync(cancellationToken), cancellationToken);
                 }
-                _listener.Stop();
+                listener.Stop();
             }
             catch (FormatException)
             {
@@ -60,11 +56,9 @@ namespace MineCase.Gateway.Network
         {
             try
             {
-                _logger.LogInformation($"Incoming connection from {tcpClient.Client.RemoteEndPoint}.");
-                using (var session = ActivatorUtilities.CreateInstance<ClientSession>(_serviceProvider, tcpClient))
-                {
-                    await session.Startup(cancellationToken);
-                }
+                _logger.LogInformation("Incoming connection from {ClientRemoteEndPoint}.", tcpClient.Client.RemoteEndPoint);
+                using var session = ActivatorUtilities.CreateInstance<ClientSession>(serviceProvider, tcpClient);
+                await session.Startup(cancellationToken);
             }
             catch (Exception ex)
             {
