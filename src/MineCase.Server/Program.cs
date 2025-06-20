@@ -7,13 +7,15 @@ using MineCase.Serialization.Serializers;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
-using Orleans.Streaming;
-//using Orleans.Providers;
-using Orleans.Runtime;
 using System.Threading.Tasks;
 using MineCase.Abstractions.Constants;
 using Orleans.Providers;
-
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using Autofac;
+using MineCase.Server.Settings;
+using Microsoft.IO;
 
 namespace MineCase.Server;
 
@@ -25,9 +27,27 @@ internal static partial class Program
         Serializers.RegisterAll();
 
         var hostBuilder = Host.CreateDefaultBuilder(args);
-        hostBuilder.UseServiceProviderFactory(x => new AutofacServiceProviderFactory(ConfigureAutofac));
-        hostBuilder.ConfigureAppConfiguration(ConfigureAppConfiguration);
-        hostBuilder.ConfigureServices(ConfigureServices);
+        hostBuilder.UseServiceProviderFactory(x => new AutofacServiceProviderFactory(builder =>
+        {
+            var assemblies = new List<Assembly>();
+            assemblies
+                .AddEngine()
+                .AddInterfaces()
+                .AddGrains();
+            builder.RegisterAssemblyModules(assemblies.ToArray());
+        }));
+        hostBuilder.ConfigureAppConfiguration(builder =>
+        {
+            builder.SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("config.json", false, false);
+        });
+        hostBuilder.ConfigureServices((context, services) =>
+        {
+            services.AddOptions();
+            services.AddLogging();
+            services.AddSingleton<RecyclableMemoryStreamManager>();
+            services.Configure<PersistenceOptions>(context.Configuration.GetSection("persistenceOptions"));
+        });
         //hostBuilder.ConfigureLogging(loggingBuilder => loggingBuilder.AddConsole());
         hostBuilder.UseConsoleLifetime();
         hostBuilder.UseOrleans((context, siloBuilder) =>
